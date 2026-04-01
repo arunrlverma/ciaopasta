@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Scratch to unlock! Future Foods Taiwan exclusive promos.">
+    <meta property="og:title" content="Open This | Future Foods Taiwan">
+    <meta property="og:description" content="Scratch your card and unlock exclusive food deals!">
+    <title>Open This | Future Foods</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&family=DM+Serif+Display&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black: #1A1A1A;
+            --red: #E52D27;
+            --cream: #F5E6C8;
+            --warm-white: #FFF8ED;
+            --line-green: #06C755;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
+            background: var(--warm-white);
+            color: var(--black);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100dvh;
+            padding: 24px 16px;
+        }
+
+        /* ── Card ── */
+        .card {
+            width: 100%;
+            max-width: 380px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+        }
+
+        @keyframes cardIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Top section — black ── */
+        .card-top {
+            background: var(--black);
+            padding: 48px 32px 40px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .checkmark {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 16px;
+            opacity: 0.85;
+        }
+
+        .card-top h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 54px;
+            line-height: 1;
+            color: var(--red);
+            letter-spacing: -1px;
+            font-weight: 400;
+        }
+
+        .card-top h1 span {
+            display: block;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            height: 1px;
+            background: rgba(26,26,26,0.08);
+        }
+
+        /* ── Bottom section — cream ── */
+        .card-bottom {
+            background: var(--cream);
+            padding: 28px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .scratch-label {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--black);
+            opacity: 0.5;
+            margin-bottom: 20px;
+        }
+
+        /* ── Scratch area ── */
+        .scratch-container {
+            position: relative;
+            width: 260px;
+            height: 160px;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .scratch-reveal {
+            position: absolute;
+            inset: 0;
+            background: var(--cream);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 2px dashed rgba(26,26,26,0.12);
+            border-radius: 12px;
+        }
+
+        .scratch-reveal .line-icon-under {
+            width: 40px;
+            height: 40px;
+            opacity: 0.9;
+        }
+
+        .scratch-reveal .reveal-text {
+            font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .scratch-reveal .reveal-sub {
+            font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
+            font-size: 11px;
+            color: var(--black);
+            opacity: 0.5;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .scratch-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        /* ── Revealed state ── */
+        .revealed-content {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            margin-top: 8px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        .revealed-content.show {
+            display: flex;
+            animation: revealIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes revealIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .youre-in {
+            font-family: 'DM Serif Display', serif;
+            font-size: 28px;
+            color: var(--black);
+        }
+
+        .line-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--line-green);
+            color: #fff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 2px 12px rgba(6,199,85,0.25);
+        }
+
+        .line-btn:active {
+            transform: scale(0.97);
+        }
+
+        .line-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* ── Brand pills strip ── */
+        .brands-section {
+            width: 100%;
+            max-width: 380px;
+            margin-top: 24px;
+            overflow: hidden;
+            mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+            -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+            opacity: 0;
+            animation: fadeIn 0.5s ease 0.6s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .brands-track {
+            display: flex;
+            gap: 8px;
+            width: max-content;
+            animation: scroll 28s linear infinite;
+        }
+
+        @keyframes scroll {
+            to { transform: translateX(-50%); }
+        }
+
+        .brand-pill {
+            flex-shrink: 0;
+            background: var(--black);
+            color: var(--cream);
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 100px;
+            white-space: nowrap;
+        }
+
+        /* ── Footer branding ── */
+        .footer {
+            margin-top: 32px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--black);
+            opacity: 0.25;
+            opacity: 0;
+            animation: fadeIn 0.5s ease 0.8s forwards;
+        }
+
+        /* ── Confetti canvas ── */
+        .confetti-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        /* ── Responsive ── */
+        @media (min-width: 420px) {
+            .card-top { padding: 56px 40px 48px; }
+            .card-top h1 { font-size: 62px; }
+            .card-bottom { padding: 32px 40px 36px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <!-- Top section — Black with red text -->
+    <div class="card-top">
+        <svg class="checkmark" viewBox="0 0 32 32" fill="none">
+            <path d="M6 16.5L13 23.5L26 8.5" stroke="#E52D27" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h1>
+            <span>open</span>
+            <span>this</span>
+        </h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Bottom section — Cream with scratch card -->
+    <div class="card-bottom">
+        <div class="scratch-label">Scratch to Unlock</div>
+
+        <div class="scratch-container" id="scratchContainer">
+            <!-- Hidden content under scratch -->
+            <div class="scratch-reveal">
+                <svg class="line-icon-under" viewBox="0 0 24 24" fill="#1A1A1A">
+                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .348-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .349-.281.631-.63.631h-2.386c-.345 0-.627-.282-.627-.631V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.63-.631.63-.346 0-.626-.286-.626-.63V8.108c0-.271.173-.508.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.63-.631.63-.345 0-.627-.286-.627-.63V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.63H4.917c-.345 0-.63-.286-.63-.63V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .349-.281.631-.629.631M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                </svg>
+                <div class="reveal-text">Add us on LINE!</div>
+                <div class="reveal-sub">Weekly promo drops &middot; 30+ brands</div>
+            </div>
+
+            <!-- Scratch surface -->
+            <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
+        </div>
+
+        <!-- Post-reveal CTA -->
+        <div class="revealed-content" id="revealedContent">
+            <div class="youre-in">You're In!</div>
+            <a href="https://line.me/R/ti/p/@futurefoods" target="_blank" class="line-btn">
+                <svg viewBox="0 0 24 24" fill="white">
+                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .348-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .349-.281.631-.63.631h-2.386c-.345 0-.627-.282-.627-.631V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.63-.631.63-.346 0-.626-.286-.626-.63V8.108c0-.271.173-.508.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.63-.631.63-.345 0-.627-.286-.627-.63V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.63H4.917c-.345 0-.63-.286-.63-.63V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .349-.281.631-.629.631M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                </svg>
+                Add Friend
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Scrolling brand pills -->
+<div class="brands-section">
+    <div class="brands-track" id="brandsTrack"></div>
+</div>
+
+<!-- Footer -->
+<div class="footer">Future Foods Taiwan</div>
+
+<!-- Confetti -->
+<canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+
+<script>
+(function() {
+    'use strict';
+
+    // ── Brand pills ──
+    const brands = [
+        '炒飯匠','粥魂','麵屋','想來點丼飯','手路炒飯',
+        '涼麵事務所','港仔佐敦','越食主義','秘制神滷',
+        '山崎屋咖哩','Thai Q','Poke 夢','金屋炸雞','早安姆姆'
+    ];
+
+    const track = document.getElementById('brandsTrack');
+    // Duplicate for seamless loop
+    const allBrands = [...brands, ...brands];
+    allBrands.forEach(name => {
+        const pill = document.createElement('span');
+        pill.className = 'brand-pill';
+        pill.textContent = name;
+        track.appendChild(pill);
+    });
+
+    // ── Scratch card ──
+    const container = document.getElementById('scratchContainer');
+    const canvas = document.getElementById('scratchCanvas');
+    const ctx = canvas.getContext('2d');
+    const BRUSH = 34;
+    const THRESHOLD = 0.28;
+    let isDrawing = false;
+    let hasRevealed = false;
+
+    function initCanvas() {
+        const rect = container.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        // Metallic silver gradient
+        const grad = ctx.createLinearGradient(0, 0, rect.width, rect.height);
+        grad.addColorStop(0, '#C0C0C0');
+        grad.addColorStop(0.25, '#D8D8D8');
+        grad.addColorStop(0.5, '#A8A8A8');
+        grad.addColorStop(0.75, '#D0D0D0');
+        grad.addColorStop(1, '#B0B0B0');
+        ctx.fillStyle = grad;
+        roundRect(ctx, 0, 0, rect.width, rect.height, 12);
+        ctx.fill();
+
+        // Subtle shimmer lines
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+        ctx.lineWidth = 1;
+        for (let i = -rect.height; i < rect.width + rect.height; i += 12) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i + rect.height, rect.height);
+            ctx.stroke();
+        }
+    }
+
+    function roundRect(c, x, y, w, h, r) {
+        c.beginPath();
+        c.moveTo(x + r, y);
+        c.lineTo(x + w - r, y);
+        c.quadraticCurveTo(x + w, y, x + w, y + r);
+        c.lineTo(x + w, y + h - r);
+        c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        c.lineTo(x + r, y + h);
+        c.quadraticCurveTo(x, y + h, x, y + h - r);
+        c.lineTo(x, y + r);
+        c.quadraticCurveTo(x, y, x + r, y);
+        c.closePath();
+    }
+
+    function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const t = e.touches ? e.touches[0] : e;
+        return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+    }
+
+    function scratch(pos) {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, BRUSH, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    function checkReveal() {
+        if (hasRevealed) return;
+        const dpr = window.devicePixelRatio || 1;
+        const w = canvas.width;
+        const h = canvas.height;
+        const data = ctx.getImageData(0, 0, w, h).data;
+        let clear = 0;
+        const total = w * h;
+        // Sample every 4th pixel for performance
+        for (let i = 3; i < data.length; i += 16) {
+            if (data[i] === 0) clear++;
+        }
+        const sampled = Math.ceil(total / 4);
+        if (clear / sampled >= THRESHOLD) {
+            reveal();
+        }
+    }
+
+    function reveal() {
+        hasRevealed = true;
+        // Clear canvas entirely
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0,0,0,1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        canvas.style.opacity = '0';
+        canvas.style.transition = 'opacity 0.3s ease';
+
+        // Haptic
+        if (navigator.vibrate) navigator.vibrate(15);
+
+        // Show CTA
+        setTimeout(() => {
+            document.getElementById('revealedContent').classList.add('show');
+        }, 200);
+
+        // Confetti
+        launchConfetti();
+    }
+
+    // Pointer events
+    canvas.addEventListener('mousedown', e => { isDrawing = true; scratch(getPos(e)); });
+    canvas.addEventListener('mousemove', e => { if (isDrawing) scratch(getPos(e)); });
+    canvas.addEventListener('mouseup', () => { isDrawing = false; checkReveal(); });
+    canvas.addEventListener('mouseleave', () => { isDrawing = false; });
+
+    canvas.addEventListener('touchstart', e => {
+        e.preventDefault();
+        isDrawing = true;
+        scratch(getPos(e));
+    }, { passive: false });
+    canvas.addEventListener('touchmove', e => {
+        e.preventDefault();
+        if (isDrawing) scratch(getPos(e));
+    }, { passive: false });
+    canvas.addEventListener('touchend', e => {
+        e.preventDefault();
+        isDrawing = false;
+        checkReveal();
+    });
+
+    // Init
+    requestAnimationFrame(initCanvas);
+    window.addEventListener('resize', () => {
+        if (!hasRevealed) initCanvas();
+    });
+
+    // ── Confetti ──
+    function launchConfetti() {
+        const cv = document.getElementById('confettiCanvas');
+        const c = cv.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        cv.width = window.innerWidth * dpr;
+        cv.height = window.innerHeight * dpr;
+        cv.style.width = window.innerWidth + 'px';
+        cv.style.height = window.innerHeight + 'px';
+        c.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const colors = ['#E52D27', '#F5E6C8', '#1A1A1A', '#D4A836', '#C0C0C0'];
+        const pieces = [];
+        const count = 40;
+
+        for (let i = 0; i < count; i++) {
+            pieces.push({
+                x: Math.random() * window.innerWidth,
+                y: -20 - Math.random() * 80,
+                w: 4 + Math.random() * 4,
+                h: 6 + Math.random() * 6,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                vx: (Math.random() - 0.5) * 3,
+                vy: 2 + Math.random() * 3,
+                rot: Math.random() * Math.PI * 2,
+                vr: (Math.random() - 0.5) * 0.15,
+                opacity: 1
+            });
+        }
+
+        let frame = 0;
+        function draw() {
+            c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            let alive = false;
+
+            pieces.forEach(p => {
+                if (p.opacity <= 0) return;
+                alive = true;
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.06;
+                p.rot += p.vr;
+                if (frame > 60) p.opacity -= 0.015;
+
+                c.save();
+                c.globalAlpha = Math.max(0, p.opacity);
+                c.translate(p.x, p.y);
+                c.rotate(p.rot);
+                c.fillStyle = p.color;
+                c.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                c.restore();
+            });
+
+            frame++;
+            if (alive && frame < 180) {
+                requestAnimationFrame(draw);
+            } else {
+                c.clearRect(0, 0, cv.width, cv.height);
+            }
+        }
+        requestAnimationFrame(draw);
+    }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Scratch to win! Future Foods Taiwan exclusive promos and deals.">
+    <meta property="og:title" content="You Got Lucky! | Future Foods Taiwan">
+    <meta property="og:description" content="Scratch your card and unlock exclusive food deals!">
+    <title>You Got Lucky! | Future Foods</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Barlow+Condensed:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --red: #E52D27;
+            --red-dark: #8B0000;
+            --red-deeper: #5C0000;
+            --cream: #F5E6C8;
+            --cream-light: #FFF8ED;
+            --cream-dark: #E8D5B0;
+            --black: #1A1A1A;
+            --green-line: #06C755;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Barlow Condensed', 'Noto Sans TC', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(175deg, #6B0000 0%, #3D0000 50%, #1F0000 100%);
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Film grain overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.14'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.45;
+            mix-blend-mode: overlay;
+        }
+
+        /* Floating food emojis */
+        .floating-emoji {
+            position: fixed;
+            font-size: 28px;
+            opacity: 0.12;
+            animation: floatEmoji 14s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .floating-emoji:nth-child(odd) { animation-direction: reverse; }
+        .floating-emoji:nth-child(1)  { top: 4%; left: 7%;  animation-delay: 0s;   font-size: 30px; }
+        .floating-emoji:nth-child(2)  { top: 10%; right: 10%; animation-delay: -2s;  font-size: 22px; }
+        .floating-emoji:nth-child(3)  { top: 28%; left: 4%;  animation-delay: -4s;  font-size: 26px; }
+        .floating-emoji:nth-child(4)  { top: 52%; right: 6%; animation-delay: -6s;  font-size: 24px; }
+        .floating-emoji:nth-child(5)  { top: 70%; left: 8%;  animation-delay: -8s;  font-size: 20px; }
+        .floating-emoji:nth-child(6)  { top: 84%; right: 12%; animation-delay: -10s; font-size: 28px; }
+        .floating-emoji:nth-child(7)  { top: 18%; left: 82%; animation-delay: -3s;  font-size: 18px; }
+        .floating-emoji:nth-child(8)  { top: 42%; left: 2%;  animation-delay: -7s;  font-size: 32px; }
+        .floating-emoji:nth-child(9)  { top: 62%; right: 3%; animation-delay: -1s;  font-size: 20px; }
+        .floating-emoji:nth-child(10) { top: 92%; left: 45%; animation-delay: -5s;  font-size: 24px; }
+
+        @keyframes floatEmoji {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-16px) rotate(6deg); }
+            50% { transform: translateY(-4px) rotate(-4deg); }
+            75% { transform: translateY(-20px) rotate(3deg); }
+        }
+
+        /* === BADGE CARD === */
+        .badge-card {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 370px;
+            animation: badgeEnter 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            filter: drop-shadow(0 10px 40px rgba(0,0,0,0.55));
+        }
+
+        @keyframes badgeEnter {
+            0% { opacity: 0; transform: scale(0.75) translateY(30px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Outer border / glow ring */
+        .badge-outer {
+            border: 3px solid rgba(245,230,200,0.2);
+            border-radius: 50% 50% 16px 16px / 30% 30% 16px 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Red top dome */
+        .badge-red {
+            background: var(--red);
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 60%, rgba(0,0,0,0.08) 0%, transparent 50%);
+            padding: 36px 24px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Retro dot pattern on red */
+        .badge-red::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+            background-size: 12px 12px;
+            pointer-events: none;
+        }
+
+        /* Inset shadow at dome bottom */
+        .badge-red::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.12), transparent);
+            pointer-events: none;
+        }
+
+        /* Curved "You Got Lucky" */
+        .curved-header {
+            width: 100%;
+            max-width: 290px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .curved-header svg { width: 100%; overflow: visible; }
+
+        .curved-header-text {
+            font-family: 'Bungee Shade', cursive;
+            fill: var(--cream);
+            font-size: 30px;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.35));
+        }
+
+        .badge-subtitle {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(245, 230, 200, 0.55);
+            margin-top: 8px;
+            display: block;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Decorative stars */
+        .stars-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        .star-svg { width: 12px; height: 12px; fill: var(--cream); opacity: 0.4; }
+        .star-line {
+            width: 36px;
+            height: 1px;
+            background: rgba(245,230,200,0.25);
+        }
+
+        /* Scalloped divider between red and cream */
+        .scallop-edge {
+            display: block;
+            width: 100%;
+            height: 14px;
+            background: var(--cream);
+            position: relative;
+            z-index: 2;
+        }
+        .scallop-edge::before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: -13px;
+            left: 0;
+            right: 0;
+            height: 14px;
+            background: radial-gradient(circle at 50% 0%, transparent 8px, var(--cream) 8.5px);
+            background-size: 22px 14px;
+            background-position: -2px top;
+        }
+
+        /* Cream bottom section */
+        .badge-cream {
+            background: var(--cream);
+            padding: 12px 22px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .badge-cream::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B0000' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* Scratch card area */
+        .scratch-zone {
+            width: 100%;
+            max-width: 255px;
+            aspect-ratio: 5 / 3;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 3px solid var(--red);
+            box-shadow:
+                inset 0 2px 8px rgba(0,0,0,0.1),
+                0 3px 10px rgba(139,0,0,0.2);
+            cursor: pointer;
+            margin-bottom: 12px;
+            z-index: 2;
+        }
+
+        .scratch-zone canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            touch-action: none;
+        }
+
+        /* Content beneath scratch surface */
+        .scratch-reveal {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, #FFF8ED 0%, #F5E6C8 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 12px;
+            z-index: 1;
+        }
+
+        .reveal-line-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: var(--green-line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(6,199,85,0.3);
+        }
+        .reveal-line-icon svg { width: 26px; height: 26px; fill: white; }
+
+        .reveal-text-main {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--black);
+        }
+
+        .reveal-text-sub {
+            font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 500;
+            font-size: 11px;
+            color: #777;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Scratch hint label */
+        .scratch-hint {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 600;
+            font-size: 10.5px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(60,60,60,0.7);
+            background: rgba(255,255,255,0.85);
+            padding: 3px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            animation: pulseHint 2.2s ease-in-out infinite;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        @keyframes pulseHint {
+            0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.5; transform: translateX(-50%) scale(0.96); }
+        }
+
+        .scratch-hint.hidden { display: none; }
+
+        /* Post-reveal CTA area */
+        .result-area {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 260px;
+            z-index: 2;
+        }
+
+        .result-area.show {
+            display: flex;
+            animation: revealPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes revealPop {
+            0% { opacity: 0; transform: scale(0.8) translateY(12px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .result-title {
+            font-family: 'Bungee Shade', cursive;
+            font-size: 30px;
+            color: var(--red);
+            text-shadow: 2px 2px 0 rgba(139,0,0,0.12);
+        }
+
+        .line-cta-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--green-line);
+            color: white;
+            text-decoration: none;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 17px;
+            letter-spacing: 0.5px;
+            padding: 14px 32px;
+            border-radius: 50px;
+            box-shadow: 0 4px 18px rgba(6,199,85,0.35), 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.15s, box-shadow 0.15s;
+            width: 100%;
+            max-width: 240px;
+            animation: btnGlow 2.5s ease-in-out infinite;
+        }
+
+        .line-cta-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 2px 8px rgba(6,199,85,0.3);
+        }
+
+        @keyframes btnGlow {
+            0%, 100% { box-shadow: 0 4px 18px rgba(6,199,85,0.35), 0 2px 4px rgba(0,0,0,0.1); }
+            50% { box-shadow: 0 4px 28px rgba(6,199,85,0.55), 0 2px 4px rgba(0,0,0,0.1), 0 0 0 6px rgba(6,199,85,0.08); }
+        }
+
+        .line-cta-btn svg { width: 22px; height: 22px; fill: white; flex-shrink: 0; }
+
+        /* Brand pills scrolling strip */
+        .brands-strip {
+            width: 100%;
+            overflow: hidden;
+            margin-top: 14px;
+            position: relative;
+            padding: 3px 0;
+            z-index: 2;
+        }
+
+        .brands-strip::before,
+        .brands-strip::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 28px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .brands-strip::before {
+            left: 0;
+            background: linear-gradient(to right, var(--cream), transparent);
+        }
+        .brands-strip::after {
+            right: 0;
+            background: linear-gradient(to left, var(--cream), transparent);
+        }
+
+        .brands-track {
+            display: flex;
+            gap: 8px;
+            animation: scrollBrands 30s linear infinite;
+            width: max-content;
+        }
+
+        @keyframes scrollBrands {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .brand-pill {
+            flex-shrink: 0;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--red-dark);
+            background: rgba(229,45,39,0.07);
+            border: 1.5px solid rgba(229,45,39,0.12);
+            padding: 4px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+
+        /* Footer branding */
+        .footer-brand {
+            margin-top: 26px;
+            text-align: center;
+            z-index: 10;
+            animation: badgeEnter 0.7s 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        .footer-name {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: rgba(245,230,200,0.45);
+        }
+
+        .footer-sub {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 400;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(245,230,200,0.2);
+            margin-top: 3px;
+        }
+
+        /* Confetti */
+        .confetti-piece {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 360px) {
+            .badge-red { padding: 28px 18px 16px; }
+            .badge-cream { padding: 10px 16px 20px; }
+            .scratch-zone { max-width: 220px; }
+            .curved-header { max-width: 250px; }
+            .curved-header-text { font-size: 26px; }
+        }
+
+        @media (min-width: 420px) {
+            .badge-card { max-width: 400px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating food emojis -->
+    <div class="floating-emoji">&#127834;</div>
+    <div class="floating-emoji">&#127858;</div>
+    <div class="floating-emoji">&#127843;</div>
+    <div class="floating-emoji">&#127835;</div>
+    <div class="floating-emoji">&#127836;</div>
+    <div class="floating-emoji">&#129385;</div>
+    <div class="floating-emoji">&#127839;</div>
+    <div class="floating-emoji">&#127859;</div>
+    <div class="floating-emoji">&#127837;</div>
+    <div class="floating-emoji">&#127838;</div>
+
+    <!-- Badge Card -->
+    <div class="badge-card">
+        <div class="badge-outer">
+            <!-- RED TOP (dome) -->
+            <div class="badge-red">
+                <div class="curved-header">
+                    <svg viewBox="0 0 300 85" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <path id="headerCurve" d="M 15,75 Q 150,8 285,75" fill="none"/>
+                        </defs>
+                        <text class="curved-header-text">
+                            <textPath href="#headerCurve" startOffset="50%" text-anchor="middle">You Got Lucky</textPath>
+                        </text>
+                    </svg>
+                </div>
+                <span class="badge-subtitle">Scratch &amp; Win</span>
+                <div class="stars-row">
+                    <svg class="star-svg" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                    <div class="star-line"></div>
+                    <svg class="star-svg" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                    <div class="star-line"></div>
+                    <svg class="star-svg" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                </div>
+            </div>
+
+            <!-- Scalloped divider -->
+            <div class="scallop-edge"></div>
+
+            <!-- CREAM BOTTOM -->
+            <div class="badge-cream">
+                <!-- Scratch Card -->
+                <div class="scratch-zone" id="scratchZone">
+                    <div class="scratch-reveal">
+                        <div class="reveal-line-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .348-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .349-.281.631-.63.631h-2.386c-.345 0-.627-.282-.627-.631V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.63-.631.63-.346 0-.626-.286-.626-.63V8.108c0-.271.173-.508.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.63-.631.63-.345 0-.627-.286-.627-.63V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.63H4.917c-.345 0-.63-.286-.63-.63V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .349-.281.631-.629.631M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                            </svg>
+                        </div>
+                        <div class="reveal-text-main">Add us on LINE!</div>
+                        <div class="reveal-text-sub">Weekly promo drops<br>30+ brands</div>
+                    </div>
+                    <canvas id="scratchCanvas"></canvas>
+                    <div class="scratch-hint" id="scratchHint">use your finger to scratch</div>
+                </div>
+
+                <!-- Post-reveal CTA -->
+                <div class="result-area" id="resultArea">
+                    <div class="result-title">You're In!</div>
+                    <a href="https://line.me/R/ti/p/@futurefoods" target="_blank" class="line-cta-btn">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .348-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .349-.281.631-.63.631h-2.386c-.345 0-.627-.282-.627-.631V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.63-.631.63-.346 0-.626-.286-.626-.63V8.108c0-.271.173-.508.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.63-.631.63-.345 0-.627-.286-.627-.63V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.63H4.917c-.345 0-.63-.286-.63-.63V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .349-.281.631-.629.631M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                        </svg>
+                        Add LINE Friend
+                    </a>
+                </div>
+
+                <!-- Brand pills marquee -->
+                <div class="brands-strip">
+                    <div class="brands-track" id="brandsTrack"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-brand">
+        <div class="footer-name">Future Foods Taiwan</div>
+        <div class="footer-sub">30+ brands, one kitchen</div>
+    </div>
+
+    <script>
+    (function() {
+        'use strict';
+
+        /* === Brand pills === */
+        var brands = [
+            '\u7092\u98EF\u5320', '\u7CA5\u9B42', '\u9EB5\u5C4B',
+            '\u60F3\u4F86\u9EDE\u4E3C\u98EF', '\u624B\u8DEF\u7092\u98EF',
+            '\u6DBC\u9EB5\u4E8B\u52D9\u6240', '\u6E2F\u4ED4\u4F50\u6566',
+            '\u8D8A\u98DF\u4E3B\u7FA9', '\u79D8\u5236\u795E\u6EF7',
+            '\u5C71\u5D0E\u5C4B\u5496\u54E9', 'Thai Q', 'Poke \u5922',
+            '\u91D1\u5C4B\u70B8\u96DE', '\u65E9\u5B89\u59C6\u59C6'
+        ];
+
+        var track = document.getElementById('brandsTrack');
+        var allBrands = brands.concat(brands);
+        for (var i = 0; i < allBrands.length; i++) {
+            var pill = document.createElement('span');
+            pill.className = 'brand-pill';
+            pill.textContent = allBrands[i];
+            track.appendChild(pill);
+        }
+
+        /* === Scratch Card === */
+        var canvas = document.getElementById('scratchCanvas');
+        var ctx = canvas.getContext('2d');
+        var zone = document.getElementById('scratchZone');
+        var hint = document.getElementById('scratchHint');
+        var resultArea = document.getElementById('resultArea');
+
+        var isScratching = false;
+        var revealed = false;
+        var hasStarted = false;
+
+        function initCanvas() {
+            var rect = zone.getBoundingClientRect();
+            var dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            var w = rect.width;
+            var h = rect.height;
+
+            // Metallic silver base gradient
+            var grad = ctx.createLinearGradient(0, 0, w, h);
+            grad.addColorStop(0, '#D4D4D4');
+            grad.addColorStop(0.15, '#E6E6E6');
+            grad.addColorStop(0.3, '#BCBCBC');
+            grad.addColorStop(0.45, '#DEDEDE');
+            grad.addColorStop(0.6, '#B5B5B5');
+            grad.addColorStop(0.75, '#D0D0D0');
+            grad.addColorStop(1, '#C4C4C4');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, h);
+
+            // Horizontal brushed metal lines
+            ctx.save();
+            ctx.globalAlpha = 0.06;
+            for (var y = 0; y < h; y += 2) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(w, y + (Math.random() - 0.5) * 1.5);
+                ctx.strokeStyle = Math.random() > 0.5 ? '#fff' : '#999';
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+            }
+            ctx.restore();
+
+            // Diagonal shimmer highlight
+            ctx.save();
+            ctx.globalAlpha = 0.12;
+            var shimmer = ctx.createLinearGradient(w * 0.2, 0, w * 0.8, h);
+            shimmer.addColorStop(0, 'rgba(255,255,255,0)');
+            shimmer.addColorStop(0.4, 'rgba(255,255,255,0.5)');
+            shimmer.addColorStop(0.6, 'rgba(255,255,255,0.5)');
+            shimmer.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = shimmer;
+            ctx.fillRect(0, 0, w, h);
+            ctx.restore();
+
+            // Specular spots
+            ctx.save();
+            ctx.globalAlpha = 0.1;
+            for (var s = 0; s < 6; s++) {
+                var sx = Math.random() * w;
+                var sy = Math.random() * h;
+                var sr = 15 + Math.random() * 30;
+                var spot = ctx.createRadialGradient(sx, sy, 0, sx, sy, sr);
+                spot.addColorStop(0, 'rgba(255,255,255,0.7)');
+                spot.addColorStop(1, 'rgba(255,255,255,0)');
+                ctx.fillStyle = spot;
+                ctx.beginPath();
+                ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.restore();
+
+            // "SCRATCH HERE" label
+            ctx.save();
+            ctx.globalAlpha = 0.18;
+            ctx.font = '600 12px "Barlow Condensed", sans-serif';
+            ctx.fillStyle = '#555';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('SCRATCH HERE', w / 2, h / 2);
+            ctx.restore();
+
+            ctx.globalCompositeOperation = 'destination-out';
+        }
+
+        function getPos(e) {
+            var rect = canvas.getBoundingClientRect();
+            var touch = e.touches ? e.touches[0] : e;
+            return {
+                x: touch.clientX - rect.left,
+                y: touch.clientY - rect.top
+            };
+        }
+
+        function scratch(pos) {
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 34, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function checkReveal() {
+            if (revealed) return;
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var pixels = imageData.data;
+            var transparent = 0;
+            var total = pixels.length / 4;
+            for (var p = 3; p < pixels.length; p += 4) {
+                if (pixels[p] === 0) transparent++;
+            }
+            if (transparent / total > 0.28) {
+                doReveal();
+            }
+        }
+
+        function doReveal() {
+            revealed = true;
+            hint.classList.add('hidden');
+
+            // Clear remaining surface with fade
+            var rect = zone.getBoundingClientRect();
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'rgba(0,0,0,1)';
+            ctx.fillRect(0, 0, rect.width * 2, rect.height * 2);
+
+            // Haptic vibrate
+            if (navigator.vibrate) {
+                navigator.vibrate([50, 30, 80]);
+            }
+
+            // Transition to result
+            setTimeout(function() {
+                zone.style.display = 'none';
+                resultArea.classList.add('show');
+            }, 350);
+
+            // Confetti burst
+            launchConfetti();
+        }
+
+        /* Touch events (with preventDefault) */
+        canvas.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            isScratching = true;
+            if (!hasStarted) { hasStarted = true; hint.classList.add('hidden'); }
+            scratch(getPos(e));
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            if (!isScratching) return;
+            scratch(getPos(e));
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            isScratching = false;
+            checkReveal();
+        }, { passive: false });
+
+        /* Mouse events (desktop fallback) */
+        canvas.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            isScratching = true;
+            if (!hasStarted) { hasStarted = true; hint.classList.add('hidden'); }
+            scratch(getPos(e));
+        });
+
+        canvas.addEventListener('mousemove', function(e) {
+            if (!isScratching) return;
+            e.preventDefault();
+            scratch(getPos(e));
+        });
+
+        canvas.addEventListener('mouseup', function() {
+            isScratching = false;
+            checkReveal();
+        });
+
+        canvas.addEventListener('mouseleave', function() {
+            isScratching = false;
+            checkReveal();
+        });
+
+        /* === Confetti === */
+        function launchConfetti() {
+            var colors = ['#E52D27', '#F5E6C8', '#06C755', '#FFD700', '#FF6B6B', '#8B0000', '#FFA500', '#fff'];
+
+            for (var i = 0; i < 70; i++) {
+                var piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                var color = colors[Math.floor(Math.random() * colors.length)];
+                var size = 5 + Math.random() * 8;
+                var isCircle = Math.random() > 0.6;
+
+                piece.style.width = size + 'px';
+                piece.style.height = isCircle ? size + 'px' : size * (0.3 + Math.random() * 0.5) + 'px';
+                piece.style.backgroundColor = color;
+                piece.style.borderRadius = isCircle ? '50%' : '2px';
+                piece.style.left = (15 + Math.random() * 70) + 'vw';
+                piece.style.top = '42vh';
+                piece.style.opacity = '1';
+
+                document.body.appendChild(piece);
+
+                animateOnePiece(piece);
+            }
+        }
+
+        function animateOnePiece(piece) {
+            var angle = -50 - Math.random() * 70;
+            var velocity = 350 + Math.random() * 550;
+            var vx = Math.cos(angle * Math.PI / 180) * velocity * (Math.random() > 0.5 ? 1 : -1);
+            var vy = Math.sin(angle * Math.PI / 180) * velocity;
+            var rotSpeed = (Math.random() - 0.5) * 900;
+            var gravity = 550 + Math.random() * 250;
+            var startTime = null;
+
+            function step(ts) {
+                if (!startTime) startTime = ts;
+                var t = (ts - startTime) / 1000;
+                var x = vx * t;
+                var y = vy * t + 0.5 * gravity * t * t;
+                var rot = rotSpeed * t;
+                var opacity = Math.max(0, 1 - t * 0.55);
+
+                piece.style.transform = 'translate(' + x + 'px,' + y + 'px) rotate(' + rot + 'deg)';
+                piece.style.opacity = opacity;
+
+                if (t < 2.8 && opacity > 0) {
+                    requestAnimationFrame(step);
+                } else {
+                    piece.remove();
+                }
+            }
+
+            setTimeout(function() {
+                requestAnimationFrame(step);
+            }, Math.random() * 180);
+        }
+
+        /* === Init === */
+        window.addEventListener('load', initCanvas);
+
+        window.addEventListener('resize', function() {
+            if (!revealed) initCanvas();
+        });
+
+    })();
+    </script>
+</body>
+</html>

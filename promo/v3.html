@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="DON'T IGNORE THIS - Future Foods Taiwan exclusive drops.">
+    <meta property="og:title" content="DON'T IGNORE THIS | Future Foods Taiwan">
+    <meta property="og:description" content="Scratch and unlock exclusive weekly promos from 30+ brands.">
+    <title>DON'T IGNORE THIS | Future Foods</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Space+Mono:wght@400;700&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black: #1A1A1A;
+            --black-deep: #0D0D0D;
+            --pink: #FF1493;
+            --magenta: #FF00FF;
+            --white: #FFFFFF;
+            --line-green: #06C755;
+            --grey: #2A2A2A;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Space Mono', 'Noto Sans TC', monospace;
+            background: var(--black-deep);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100dvh;
+            position: relative;
+        }
+
+        /* ── Scanlines ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 20, 147, 0.03) 2px,
+                rgba(255, 20, 147, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* ── CRT flicker ── */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 0, 255, 0.015);
+            pointer-events: none;
+            z-index: 999;
+            animation: crtFlicker 0.15s infinite;
+        }
+
+        @keyframes crtFlicker {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* ── Glitch keyframes ── */
+        @keyframes glitch1 {
+            0%, 100% {
+                clip-path: inset(0 0 0 0);
+                transform: translate(0);
+            }
+            5% {
+                clip-path: inset(20% 0 60% 0);
+                transform: translate(-4px, -2px);
+            }
+            10% {
+                clip-path: inset(50% 0 20% 0);
+                transform: translate(4px, 2px);
+            }
+            15% {
+                clip-path: inset(10% 0 70% 0);
+                transform: translate(-2px, 1px);
+            }
+            20% {
+                clip-path: inset(80% 0 5% 0);
+                transform: translate(3px, -1px);
+            }
+            25%, 100% {
+                clip-path: inset(0 0 0 0);
+                transform: translate(0);
+            }
+        }
+
+        @keyframes glitch2 {
+            0%, 100% {
+                clip-path: inset(0 0 0 0);
+                transform: translate(0);
+            }
+            5% {
+                clip-path: inset(60% 0 10% 0);
+                transform: translate(4px, 1px);
+            }
+            10% {
+                clip-path: inset(15% 0 55% 0);
+                transform: translate(-3px, -2px);
+            }
+            15% {
+                clip-path: inset(70% 0 10% 0);
+                transform: translate(2px, 1px);
+            }
+            20% {
+                clip-path: inset(5% 0 80% 0);
+                transform: translate(-4px, 2px);
+            }
+            25%, 100% {
+                clip-path: inset(0 0 0 0);
+                transform: translate(0);
+            }
+        }
+
+        @keyframes glitchSkew {
+            0%, 100% { transform: skew(0deg); }
+            20% { transform: skew(-2deg); }
+            40% { transform: skew(0.5deg); }
+            60% { transform: skew(-0.3deg); }
+            80% { transform: skew(1deg); }
+        }
+
+        @keyframes noiseLine {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @keyframes cardIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes borderPulse {
+            0%, 100% {
+                box-shadow:
+                    0 0 10px rgba(255, 20, 147, 0.5),
+                    0 0 30px rgba(255, 20, 147, 0.2),
+                    0 0 60px rgba(255, 0, 255, 0.1),
+                    inset 0 0 10px rgba(255, 20, 147, 0.05);
+            }
+            50% {
+                box-shadow:
+                    0 0 15px rgba(255, 20, 147, 0.7),
+                    0 0 40px rgba(255, 20, 147, 0.3),
+                    0 0 80px rgba(255, 0, 255, 0.15),
+                    inset 0 0 15px rgba(255, 20, 147, 0.08);
+            }
+        }
+
+        @keyframes scrollBrands {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes sparkle {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(180deg); opacity: 0; }
+        }
+
+        @keyframes revealPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pinkPulse {
+            0%, 100% { text-shadow: 0 0 10px rgba(255,20,147,0.5); }
+            50% { text-shadow: 0 0 25px rgba(255,20,147,0.9), 0 0 50px rgba(255,0,255,0.4); }
+        }
+
+        /* ── Main card ── */
+        .card {
+            width: 92vw;
+            max-width: 420px;
+            background: var(--black);
+            border-radius: 20px;
+            margin: 28px auto 0;
+            padding: 0;
+            position: relative;
+            border: 2px solid var(--pink);
+            animation: cardIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+                       borderPulse 3s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        /* ── Noise/interference lines across card ── */
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 3px,
+                    rgba(255, 20, 147, 0.02) 3px,
+                    rgba(255, 20, 147, 0.02) 4px
+                );
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* ── Horizontal interference bands ── */
+        .interference {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 20, 147, 0.15);
+            pointer-events: none;
+            z-index: 3;
+            animation: interferenceMove 8s linear infinite;
+        }
+
+        .interference:nth-child(1) { top: 18%; animation-delay: 0s; }
+        .interference:nth-child(2) { top: 42%; animation-delay: -3s; opacity: 0.7; }
+        .interference:nth-child(3) { top: 67%; animation-delay: -5s; }
+        .interference:nth-child(4) { top: 85%; animation-delay: -1.5s; opacity: 0.5; }
+
+        @keyframes interferenceMove {
+            0%, 100% { transform: scaleX(1); opacity: 0.3; }
+            15% { transform: scaleX(0.6); opacity: 0.8; }
+            30% { transform: scaleX(1); opacity: 0.3; }
+            45% { transform: scaleX(0.85); opacity: 0.5; }
+            60% { transform: scaleX(1); opacity: 0.3; }
+        }
+
+        .card-inner {
+            padding: 32px 20px 24px;
+            position: relative;
+            z-index: 4;
+        }
+
+        /* ── Glitch header ── */
+        .glitch-wrap {
+            text-align: center;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .glitch-title {
+            font-family: 'Black Ops One', cursive;
+            font-size: clamp(26px, 7vw, 36px);
+            color: var(--pink);
+            text-transform: uppercase;
+            line-height: 1.15;
+            position: relative;
+            display: inline-block;
+            animation: glitchSkew 4s ease-in-out infinite;
+            text-shadow:
+                0 0 10px rgba(255, 20, 147, 0.6),
+                0 0 40px rgba(255, 20, 147, 0.3);
+        }
+
+        .glitch-title::before,
+        .glitch-title::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .glitch-title::before {
+            color: var(--magenta);
+            animation: glitch1 3s infinite linear;
+            text-shadow: -2px 0 var(--magenta);
+            z-index: -1;
+        }
+
+        .glitch-title::after {
+            color: #00FFFF;
+            animation: glitch2 3s infinite linear;
+            animation-delay: 0.1s;
+            text-shadow: 2px 0 #00FFFF;
+            z-index: -2;
+        }
+
+        .subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 20, 147, 0.6);
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* ── Scratch area ── */
+        .scratch-section {
+            position: relative;
+            width: 100%;
+            margin: 8px 0 20px;
+        }
+
+        .scratch-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 2.2 / 1;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 20, 147, 0.3);
+        }
+
+        .scratch-reveal {
+            position: absolute;
+            inset: 0;
+            background: var(--pink);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border-radius: 14px;
+        }
+
+        .scratch-reveal .line-icon {
+            width: 48px;
+            height: 48px;
+        }
+
+        .scratch-reveal .reveal-text {
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 0.5px;
+        }
+
+        .scratch-reveal .reveal-sub {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.85);
+            letter-spacing: 1px;
+        }
+
+        .scratch-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 14px;
+            cursor: pointer;
+            touch-action: none;
+        }
+
+        .scratch-hint {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+            z-index: 5;
+            transition: opacity 0.3s;
+        }
+
+        /* ── Revealed state ── */
+        .revealed-content {
+            display: none;
+            text-align: center;
+            padding: 4px 0 8px;
+            animation: revealPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .revealed-content.show {
+            display: block;
+        }
+
+        .youre-in {
+            font-family: 'Black Ops One', cursive;
+            font-size: 28px;
+            color: var(--pink);
+            margin-bottom: 12px;
+            animation: pinkPulse 2s ease-in-out infinite;
+        }
+
+        .line-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--line-green);
+            color: var(--white);
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(6, 199, 85, 0.4);
+        }
+
+        .line-cta:active {
+            transform: scale(0.96);
+        }
+
+        .line-cta svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        /* ── Brand pills strip ── */
+        .brands-section {
+            margin: 20px -20px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .brands-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 20, 147, 0.5);
+            text-align: center;
+            margin-bottom: 10px;
+            padding: 0 20px;
+        }
+
+        .brands-track-wrap {
+            position: relative;
+            overflow: hidden;
+            mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+        }
+
+        .brands-track {
+            display: flex;
+            gap: 8px;
+            width: max-content;
+            animation: scrollBrands 25s linear infinite;
+        }
+
+        .brands-track:hover {
+            animation-play-state: paused;
+        }
+
+        .brand-pill {
+            flex-shrink: 0;
+            background: var(--pink);
+            color: var(--black);
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 50px;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 20px 0 8px;
+        }
+
+        .footer-brand {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 20, 147, 0.4);
+        }
+
+        /* ── Bottom page branding ── */
+        .page-footer {
+            margin-top: 20px;
+            margin-bottom: 28px;
+            text-align: center;
+            opacity: 0.4;
+        }
+
+        .page-footer span {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--pink);
+        }
+
+        /* ── Spark particles ── */
+        .spark {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2000;
+            animation: sparkle 0.8s ease-out forwards;
+        }
+
+        /* ── Glitch flicker overlay (periodic) ── */
+        .glitch-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 998;
+            opacity: 0;
+            background: linear-gradient(
+                0deg,
+                transparent 40%,
+                rgba(255, 20, 147, 0.06) 41%,
+                transparent 42%,
+                transparent 58%,
+                rgba(255, 0, 255, 0.04) 59%,
+                transparent 60%
+            );
+            transition: opacity 0.05s;
+        }
+
+        .glitch-overlay.flash {
+            opacity: 1;
+        }
+
+        /* ── Responsive ── */
+        @media (min-width: 500px) {
+            .card { margin-top: 40px; }
+            .card-inner { padding: 40px 28px 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glitch-overlay" id="glitchOverlay"></div>
+
+<div class="card">
+    <div class="interference"></div>
+    <div class="interference"></div>
+    <div class="interference"></div>
+    <div class="interference"></div>
+
+    <div class="card-inner">
+        <!-- Glitch header -->
+        <div class="glitch-wrap">
+            <div class="glitch-title" data-text="DON'T IGNORE THIS">DON'T IGNORE THIS</div>
+            <div class="subtitle">// scratch to reveal //</div>
+        </div>
+
+        <!-- Scratch area -->
+        <div class="scratch-section">
+            <div class="scratch-container" id="scratchContainer">
+                <div class="scratch-reveal">
+                    <svg class="line-icon" viewBox="0 0 24 24" fill="white">
+                        <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .348-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .349-.281.631-.63.631h-2.386c-.345 0-.627-.282-.627-.631V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.63-.631.63-.346 0-.626-.286-.626-.63V8.108c0-.271.173-.508.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.63-.631.63-.345 0-.627-.286-.627-.63V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.63H4.917c-.345 0-.63-.286-.63-.63V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .349-.281.631-.629.631M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                    </svg>
+                    <span class="reveal-text">Add us on LINE!</span>
+                    <span class="reveal-sub">Weekly promo drops &mdash; 30+ brands</span>
+                </div>
+                <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
+            </div>
+            <div class="scratch-hint" id="scratchHint">&#9618;&#9618; SCRATCH HERE &#9618;&#9618;</div>
+        </div>
+
+        <!-- Revealed CTA (hidden until scratch) -->
+        <div class="revealed-content" id="revealedContent">
+            <div class="youre-in">You're In!</div>
+            <a href="https://line.me/R/ti/p/@futurefoods" target="_blank" class="line-cta" id="lineBtn">
+                <svg viewBox="0 0 24 24" fill="white">
+                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .348-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .349-.281.631-.63.631h-2.386c-.345 0-.627-.282-.627-.631V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.63-.631.63-.346 0-.626-.286-.626-.63V8.108c0-.271.173-.508.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.63-.631.63-.345 0-.627-.286-.627-.63V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.63H4.917c-.345 0-.63-.286-.63-.63V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .349-.281.631-.629.631M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                </svg>
+                Join LINE
+            </a>
+        </div>
+
+        <!-- Brand pills -->
+        <div class="brands-section">
+            <div class="brands-label">30+ brands dropping weekly</div>
+            <div class="brands-track-wrap">
+                <div class="brands-track" id="brandsTrack">
+                    <span class="brand-pill">炒飯匠</span>
+                    <span class="brand-pill">粥魂</span>
+                    <span class="brand-pill">麵屋</span>
+                    <span class="brand-pill">想來點丼飯</span>
+                    <span class="brand-pill">手路炒飯</span>
+                    <span class="brand-pill">涼麵事務所</span>
+                    <span class="brand-pill">港仔佐敦</span>
+                    <span class="brand-pill">越食主義</span>
+                    <span class="brand-pill">秘制神滷</span>
+                    <span class="brand-pill">山崎屋咖哩</span>
+                    <span class="brand-pill">Thai Q</span>
+                    <span class="brand-pill">Poke 夢</span>
+                    <span class="brand-pill">金屋炸雞</span>
+                    <span class="brand-pill">早安姆姆</span>
+                    <!-- duplicated for seamless scroll -->
+                    <span class="brand-pill">炒飯匠</span>
+                    <span class="brand-pill">粥魂</span>
+                    <span class="brand-pill">麵屋</span>
+                    <span class="brand-pill">想來點丼飯</span>
+                    <span class="brand-pill">手路炒飯</span>
+                    <span class="brand-pill">涼麵事務所</span>
+                    <span class="brand-pill">港仔佐敦</span>
+                    <span class="brand-pill">越食主義</span>
+                    <span class="brand-pill">秘制神滷</span>
+                    <span class="brand-pill">山崎屋咖哩</span>
+                    <span class="brand-pill">Thai Q</span>
+                    <span class="brand-pill">Poke 夢</span>
+                    <span class="brand-pill">金屋炸雞</span>
+                    <span class="brand-pill">早安姆姆</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-brand">Future Foods Taiwan</div>
+        </div>
+    </div>
+</div>
+
+<div class="page-footer">
+    <span>&copy; 2026 Future Foods Taiwan</span>
+</div>
+
+<script>
+(function() {
+    'use strict';
+
+    // ── Periodic glitch flicker ──
+    const overlay = document.getElementById('glitchOverlay');
+    function triggerGlitch() {
+        overlay.classList.add('flash');
+        setTimeout(function() { overlay.classList.remove('flash'); }, 80);
+        setTimeout(triggerGlitch, 3000 + Math.random() * 5000);
+    }
+    setTimeout(triggerGlitch, 2000);
+
+    // ── Scratch card ──
+    var canvas = document.getElementById('scratchCanvas');
+    var container = document.getElementById('scratchContainer');
+    var ctx = canvas.getContext('2d');
+    var hint = document.getElementById('scratchHint');
+    var revealedContent = document.getElementById('revealedContent');
+    var isRevealed = false;
+    var isDrawing = false;
+    var brushRadius = 34;
+    var revealThreshold = 0.28;
+
+    function resizeCanvas() {
+        var rect = container.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        drawSurface();
+    }
+
+    function drawSurface() {
+        var w = canvas.width;
+        var h = canvas.height;
+
+        // Dark holographic/iridescent gradient
+        var grad = ctx.createLinearGradient(0, 0, w, h);
+        grad.addColorStop(0, '#1a0a2e');
+        grad.addColorStop(0.25, '#2d1b4e');
+        grad.addColorStop(0.5, '#1a0a2e');
+        grad.addColorStop(0.75, '#2a1040');
+        grad.addColorStop(1, '#1a0a2e');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Purple/pink shimmer streaks
+        for (var i = 0; i < 12; i++) {
+            var y = (h / 12) * i + Math.random() * 10;
+            var shimmerGrad = ctx.createLinearGradient(0, y, w, y);
+            shimmerGrad.addColorStop(0, 'rgba(255, 20, 147, 0)');
+            shimmerGrad.addColorStop(0.3 + Math.random() * 0.2, 'rgba(255, 20, 147, ' + (0.06 + Math.random() * 0.08) + ')');
+            shimmerGrad.addColorStop(0.6 + Math.random() * 0.2, 'rgba(180, 0, 255, ' + (0.04 + Math.random() * 0.06) + ')');
+            shimmerGrad.addColorStop(1, 'rgba(255, 0, 255, 0)');
+            ctx.fillStyle = shimmerGrad;
+            ctx.fillRect(0, y - 2, w, 4 + Math.random() * 3);
+        }
+
+        // Fine horizontal noise lines
+        for (var j = 0; j < h; j += 2) {
+            if (Math.random() > 0.7) {
+                ctx.fillStyle = 'rgba(255, 255, 255, ' + (Math.random() * 0.04) + ')';
+                ctx.fillRect(0, j, w, 1);
+            }
+        }
+
+        // Subtle grid pattern
+        ctx.strokeStyle = 'rgba(255, 20, 147, 0.04)';
+        ctx.lineWidth = 0.5;
+        for (var gx = 0; gx < w; gx += 20) {
+            ctx.beginPath();
+            ctx.moveTo(gx, 0);
+            ctx.lineTo(gx, h);
+            ctx.stroke();
+        }
+        for (var gy = 0; gy < h; gy += 20) {
+            ctx.beginPath();
+            ctx.moveTo(0, gy);
+            ctx.lineTo(w, gy);
+            ctx.stroke();
+        }
+
+        // Center text
+        ctx.save();
+        ctx.font = '700 11px "Space Mono", monospace';
+        ctx.fillStyle = 'rgba(255, 20, 147, 0.35)';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('SCRATCH TO REVEAL', w / 2, h / 2);
+        ctx.restore();
+    }
+
+    function getPos(e) {
+        var rect = canvas.getBoundingClientRect();
+        var touch = e.touches ? e.touches[0] : e;
+        return {
+            x: (touch.clientX - rect.left) * (canvas.width / rect.width),
+            y: (touch.clientY - rect.top) * (canvas.height / rect.height)
+        };
+    }
+
+    function scratch(pos) {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, brushRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+    }
+
+    function checkReveal() {
+        if (isRevealed) return;
+        var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        var pixels = imageData.data;
+        var total = pixels.length / 4;
+        var cleared = 0;
+        for (var i = 3; i < pixels.length; i += 4) {
+            if (pixels[i] === 0) cleared++;
+        }
+        if (cleared / total >= revealThreshold) {
+            doReveal();
+        }
+    }
+
+    function doReveal() {
+        isRevealed = true;
+        canvas.style.transition = 'opacity 0.5s';
+        canvas.style.opacity = '0';
+        hint.style.opacity = '0';
+        setTimeout(function() {
+            canvas.style.display = 'none';
+            revealedContent.classList.add('show');
+        }, 500);
+
+        // Haptic
+        if (navigator.vibrate) navigator.vibrate([50, 30, 80]);
+
+        // Sparks
+        spawnSparks();
+    }
+
+    function spawnSparks() {
+        var containerRect = container.getBoundingClientRect();
+        var cx = containerRect.left + containerRect.width / 2;
+        var cy = containerRect.top + containerRect.height / 2;
+        var colors = ['#FF1493', '#FF00FF', '#FF69B4', '#FFFFFF', '#FF1493'];
+
+        for (var i = 0; i < 30; i++) {
+            (function(idx) {
+                setTimeout(function() {
+                    var spark = document.createElement('div');
+                    spark.className = 'spark';
+                    var angle = (Math.PI * 2 / 30) * idx + Math.random() * 0.5;
+                    var dist = 40 + Math.random() * 100;
+                    var x = cx + Math.cos(angle) * dist;
+                    var y = cy + Math.sin(angle) * dist;
+                    spark.style.left = x + 'px';
+                    spark.style.top = y + 'px';
+                    spark.style.background = colors[idx % colors.length];
+                    spark.style.width = (3 + Math.random() * 5) + 'px';
+                    spark.style.height = spark.style.width;
+                    spark.style.boxShadow = '0 0 6px ' + colors[idx % colors.length];
+                    document.body.appendChild(spark);
+                    setTimeout(function() { spark.remove(); }, 800);
+                }, idx * 20);
+            })(i);
+        }
+    }
+
+    // Events
+    function onStart(e) {
+        e.preventDefault();
+        isDrawing = true;
+        hint.style.opacity = '0';
+        var pos = getPos(e);
+        scratch(pos);
+    }
+
+    function onMove(e) {
+        if (!isDrawing || isRevealed) return;
+        e.preventDefault();
+        var pos = getPos(e);
+        scratch(pos);
+    }
+
+    function onEnd() {
+        if (!isDrawing) return;
+        isDrawing = false;
+        checkReveal();
+    }
+
+    canvas.addEventListener('mousedown', onStart);
+    canvas.addEventListener('mousemove', onMove);
+    canvas.addEventListener('mouseup', onEnd);
+    canvas.addEventListener('mouseleave', onEnd);
+    canvas.addEventListener('touchstart', onStart, { passive: false });
+    canvas.addEventListener('touchmove', onMove, { passive: false });
+    canvas.addEventListener('touchend', onEnd);
+    canvas.addEventListener('touchcancel', onEnd);
+
+    // Init
+    window.addEventListener('resize', function() {
+        if (!isRevealed) resizeCanvas();
+    });
+    resizeCanvas();
+})();
+</script>
+</body>
+</html>

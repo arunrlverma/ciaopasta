@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Scratch to win! Future Foods Taiwan exclusive promos and deals.">
+    <meta property="og:title" content="You Got Lucky! | Future Foods Taiwan">
+    <meta property="og:description" content="Scratch your card and unlock exclusive food deals!">
+    <title>You Got Lucky! | Future Foods</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Passion+One:wght@400;700;900&family=Dela+Gothic+One&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --red: #E52D27;
+            --red-dark: #B71C1C;
+            --cream: #F5E6C8;
+            --cream-light: #FFF8ED;
+            --cream-dark: #E8D5B0;
+            --black: #1A1A1A;
+            --gold: #D4A836;
+            --coral: #E8725C;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: var(--red);
+            color: var(--black);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100dvh;
+            position: relative;
+        }
+
+        /* ── Animated grain overlay ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* ── Top decorative stripe ── */
+        .stripe-bar {
+            width: 100%;
+            height: 8px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--cream) 0, var(--cream) 16px,
+                var(--red-dark) 16px, var(--red-dark) 18px
+            );
+            flex-shrink: 0;
+        }
+
+        /* ── Main card container ── */
+        .card {
+            width: 92vw;
+            max-width: 420px;
+            background: var(--cream);
+            border-radius: 24px;
+            margin: 20px auto 0;
+            padding: 0;
+            position: relative;
+            box-shadow:
+                0 8px 0 0 var(--red-dark),
+                0 12px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: cardIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ── Card header ── */
+        .card-header {
+            background: var(--red);
+            padding: 28px 24px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: var(--cream);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+
+        .card-header h1 {
+            font-family: 'Passion One', sans-serif;
+            font-weight: 900;
+            font-size: 2.8rem;
+            line-height: 0.95;
+            color: var(--cream);
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+            animation: titlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .card-header .subtitle {
+            font-family: 'Righteous', sans-serif;
+            font-size: 0.95rem;
+            color: var(--cream-dark);
+            margin-top: 6px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ── Decorative double line ── */
+        .double-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 8px 24px;
+        }
+
+        .double-line span {
+            flex: 1;
+            height: 2px;
+            background: var(--red);
+            opacity: 0.3;
+        }
+
+        .double-line .diamond {
+            width: 8px;
+            height: 8px;
+            background: var(--red);
+            transform: rotate(45deg);
+            opacity: 0.4;
+            flex-shrink: 0;
+        }
+
+        /* ── Scratch card area ── */
+        .scratch-section {
+            padding: 8px 24px 20px;
+            text-align: center;
+        }
+
+        .scratch-label {
+            font-family: 'Dela Gothic One', sans-serif;
+            font-size: 1.1rem;
+            color: var(--red);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .scratch-container {
+            position: relative;
+            width: 280px;
+            height: 180px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 3px solid var(--red);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            touch-action: none;
+        }
+
+        .scratch-prize {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FFF8ED 0%, #F5E6C8 100%);
+            z-index: 1;
+            gap: 6px;
+        }
+
+        .prize-line-icon {
+            width: 52px;
+            height: 52px;
+            background: #06C755;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(6,199,85,0.3);
+        }
+
+        .prize-line-icon svg { width: 32px; height: 32px; }
+
+        .prize-text {
+            font-family: 'Passion One', sans-serif;
+            font-size: 1.35rem;
+            color: var(--red);
+            line-height: 1.15;
+        }
+
+        .prize-detail {
+            font-size: 0.75rem;
+            color: var(--red-dark);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .scratch-canvas {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            border-radius: 13px;
+        }
+
+        .scratch-hint {
+            font-size: 0.78rem;
+            color: #999;
+            margin-top: 10px;
+            transition: opacity 0.3s;
+        }
+
+        .scratch-hint.hidden { opacity: 0; }
+
+        /* ── Prize revealed state ── */
+        .reveal-section {
+            padding: 0 24px 24px;
+            text-align: center;
+            display: none;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .reveal-section.show { display: block; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .congrats {
+            font-family: 'Passion One', sans-serif;
+            font-size: 1.8rem;
+            color: var(--red);
+            margin-bottom: 4px;
+        }
+
+        .congrats-sub {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        /* ── LINE CTA button ── */
+        .line-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #06C755;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 32px;
+            font-family: 'Righteous', sans-serif;
+            font-size: 1.05rem;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 0 0 #05A348, 0 6px 20px rgba(6,199,85,0.3);
+            transition: all 0.15s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .line-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 0 #05A348, 0 3px 10px rgba(6,199,85,0.3);
+        }
+
+        .line-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .line-icon {
+            width: 26px;
+            height: 26px;
+        }
+
+        .line-btn-sub {
+            font-size: 0.72rem;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        /* ── Brands strip ── */
+        .brands-strip {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 2px dashed rgba(0,0,0,0.08);
+        }
+
+        .brands-label {
+            font-size: 0.7rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+
+        .brands-scroll {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            animation: scrollHint 6s ease-in-out infinite;
+        }
+
+        .brands-scroll::-webkit-scrollbar { display: none; }
+
+        @keyframes scrollHint {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-20px); }
+        }
+
+        .brands-scroll span {
+            flex-shrink: 0;
+            background: var(--red);
+            color: var(--cream);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .brands-scroll span:last-child {
+            background: var(--cream-dark);
+            color: var(--red-dark);
+        }
+
+        /* ── Bottom branding ── */
+        .branding {
+            padding: 20px 24px 16px;
+            text-align: center;
+            border-top: 2px dashed rgba(0,0,0,0.08);
+            margin-top: auto;
+        }
+
+        .branding-logo {
+            font-family: 'Dela Gothic One', sans-serif;
+            font-size: 0.7rem;
+            color: #aaa;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        /* ── Floating food emojis ── */
+        .floater {
+            position: fixed;
+            font-size: 1.6rem;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 50;
+            animation: floatUp var(--dur, 4s) var(--delay, 0s) ease-out infinite;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 0; transform: translateY(100vh) rotate(0deg); }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { opacity: 0; transform: translateY(-10vh) rotate(360deg); }
+        }
+
+        /* ── Confetti burst ── */
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 99;
+            pointer-events: none;
+        }
+
+        /* ── Sparkle ring on scratch reveal ── */
+        .sparkle-ring {
+            position: absolute;
+            inset: -20px;
+            border: 3px solid var(--gold);
+            border-radius: 20px;
+            opacity: 0;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .sparkle-ring.burst {
+            animation: ringBurst 0.6s ease-out forwards;
+        }
+
+        @keyframes ringBurst {
+            0% { opacity: 1; transform: scale(0.8); }
+            100% { opacity: 0; transform: scale(1.2); }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 360px) {
+            .card-header h1 { font-size: 2.2rem; }
+            .scratch-container { width: 240px; height: 140px; }
+            .prize-text { font-size: 1.3rem; }
+        }
+
+        @media (min-width: 500px) {
+            .card { margin-top: 40px; }
+        }
+
+        /* ── Page 2: post-reveal state ── */
+        .card.revealed .scratch-section { display: none; }
+        .card.revealed .double-line:first-of-type { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="stripe-bar"></div>
+
+<div class="card" id="card">
+    <div class="card-header">
+        <h1>You've Got<br>Something Good</h1>
+        <div class="subtitle">Scratch &amp; Win</div>
+    </div>
+
+    <div class="double-line">
+        <span></span><div class="diamond"></div><span></span>
+    </div>
+
+    <div class="scratch-section" id="scratchSection">
+        <div class="scratch-label">SCRATCH OFF</div>
+        <div class="scratch-container" id="scratchContainer">
+            <div class="scratch-prize" id="prizeContent">
+                <div class="prize-line-icon">
+                    <svg viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .348-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .349-.281.631-.63.631h-2.386c-.345 0-.627-.282-.627-.631V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.63-.631.63-.346 0-.626-.286-.626-.63V8.108c0-.271.173-.508.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.63-.631.63-.345 0-.627-.286-.627-.63V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.63H4.917c-.345 0-.63-.286-.63-.63V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .349-.281.631-.629.631M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+                </div>
+                <div class="prize-text">Add us on LINE!</div>
+                <div class="prize-detail">Weekly promo drops &bull; 30+ brands</div>
+            </div>
+            <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
+            <div class="sparkle-ring" id="sparkleRing"></div>
+        </div>
+        <div class="scratch-hint" id="scratchHint">use your finger to scratch</div>
+    </div>
+
+    <div class="double-line">
+        <span></span><div class="diamond"></div><span></span>
+    </div>
+
+    <div class="reveal-section" id="revealSection">
+        <div class="congrats">You're In!</div>
+        <div class="congrats-sub">
+            Connect on LINE for<br>
+            <strong style="color:var(--red); font-size:1.05rem;">weekly promo drops</strong><br>
+            across 30+ food brands
+        </div>
+
+        <a class="line-btn" id="lineBtn" href="#" target="_blank" rel="noopener">
+            <svg class="line-icon" viewBox="0 0 24 24" fill="white">
+                <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .348-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .349-.281.631-.63.631h-2.386c-.345 0-.627-.282-.627-.631V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.63-.631.63-.346 0-.626-.286-.626-.63V8.108c0-.271.173-.508.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.63-.631.63-.345 0-.627-.286-.627-.63V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.63H4.917c-.345 0-.63-.286-.63-.63V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .349-.281.631-.629.631M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+            </svg>
+            Add on LINE
+        </a>
+        <div class="line-btn-sub">Deals drop every week &mdash; don't miss out</div>
+
+        <div class="brands-strip">
+            <div class="brands-label">Promos from brands like</div>
+            <div class="brands-scroll">
+                <span>炒飯匠</span><span>粥魂</span><span>麵屋</span><span>想來點丼飯</span><span>手路炒飯</span><span>涼麵事務所</span><span>港仔佐敦</span><span>越食主義</span><span>秘制神滷</span><span>山崎屋咖哩</span><span>Thai Q</span><span>Poke 夢</span><span>金屋炸雞</span><span>早安姆姆</span><span>+ more</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="branding">
+        <div class="branding-logo">Future Foods Taiwan</div>
+    </div>
+</div>
+
+<div class="stripe-bar" style="margin-top: 20px;"></div>
+
+<script>
+(function() {
+    // ── Scratch card canvas ──
+    const canvas = document.getElementById('scratchCanvas');
+    const container = document.getElementById('scratchContainer');
+    const ctx = canvas.getContext('2d');
+    let isScratching = false;
+    let scratchedPixels = 0;
+    let totalPixels = 0;
+    let revealed = false;
+
+    function initCanvas() {
+        const rect = container.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+        ctx.scale(dpr, dpr);
+
+        // Draw scratch surface - metallic silver look
+        const grad = ctx.createLinearGradient(0, 0, rect.width, rect.height);
+        grad.addColorStop(0, '#C0C0C0');
+        grad.addColorStop(0.3, '#D8D8D8');
+        grad.addColorStop(0.5, '#A8A8A8');
+        grad.addColorStop(0.7, '#D0D0D0');
+        grad.addColorStop(1, '#B0B0B0');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, rect.width, rect.height);
+
+        // Add subtle texture pattern
+        ctx.globalAlpha = 0.08;
+        for (let i = 0; i < rect.width; i += 3) {
+            for (let j = 0; j < rect.height; j += 3) {
+                if (Math.random() > 0.5) {
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(i, j, 1, 1);
+                }
+            }
+        }
+        ctx.globalAlpha = 1;
+
+        // "SCRATCH HERE" text
+        ctx.fillStyle = 'rgba(0,0,0,0.15)';
+        ctx.font = 'bold 18px "Righteous", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('SCRATCH HERE', rect.width / 2, rect.height / 2);
+
+        // Add crosshatch lines for texture
+        ctx.strokeStyle = 'rgba(0,0,0,0.03)';
+        ctx.lineWidth = 1;
+        for (let i = -rect.height; i < rect.width; i += 8) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i + rect.height, rect.height);
+            ctx.stroke();
+        }
+
+        totalPixels = canvas.width * canvas.height;
+        ctx.globalCompositeOperation = 'destination-out';
+    }
+
+    function scratch(x, y) {
+        const rect = container.getBoundingClientRect();
+        const px = x - rect.left;
+        const py = y - rect.top;
+
+        ctx.beginPath();
+        ctx.arc(px, py, 34, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Check percentage scratched
+        checkScratchProgress();
+    }
+
+    function checkScratchProgress() {
+        if (revealed) return;
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        let cleared = 0;
+        for (let i = 3; i < imageData.data.length; i += 4) {
+            if (imageData.data[i] === 0) cleared++;
+        }
+        const pct = cleared / (totalPixels / 4);
+        if (pct > 0.28) {
+            revealPrize();
+        }
+    }
+
+    function revealPrize() {
+        revealed = true;
+        canvas.style.transition = 'opacity 0.5s';
+        canvas.style.opacity = '0';
+
+        document.getElementById('sparkleRing').classList.add('burst');
+        document.getElementById('scratchHint').classList.add('hidden');
+
+        setTimeout(() => {
+            canvas.style.display = 'none';
+            document.getElementById('card').classList.add('revealed');
+            document.getElementById('revealSection').classList.add('show');
+            burstConfetti();
+
+            // Haptic feedback if available
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        }, 600);
+    }
+
+    // ── Touch / mouse events ──
+    canvas.addEventListener('mousedown', (e) => { isScratching = true; scratch(e.clientX, e.clientY); });
+    canvas.addEventListener('mousemove', (e) => { if (isScratching) scratch(e.clientX, e.clientY); });
+    canvas.addEventListener('mouseup', () => { isScratching = false; });
+    canvas.addEventListener('mouseleave', () => { isScratching = false; });
+
+    canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        isScratching = true;
+        const t = e.touches[0];
+        scratch(t.clientX, t.clientY);
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (!isScratching) return;
+        const t = e.touches[0];
+        scratch(t.clientX, t.clientY);
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', () => { isScratching = false; });
+
+    // ── Confetti burst ──
+    function burstConfetti() {
+        const colors = ['#E52D27', '#F5E6C8', '#D4A836', '#06C755', '#E8725C', '#FFD700'];
+        const container = document.body;
+        for (let i = 0; i < 60; i++) {
+            const piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            piece.style.left = (40 + Math.random() * 20) + 'vw';
+            piece.style.top = '40vh';
+            piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+            piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+            piece.style.width = (6 + Math.random() * 8) + 'px';
+            piece.style.height = (6 + Math.random() * 8) + 'px';
+
+            const angle = (Math.random() * 360) * Math.PI / 180;
+            const velocity = 200 + Math.random() * 400;
+            const dx = Math.cos(angle) * velocity;
+            const dy = Math.sin(angle) * velocity - 300;
+            const rot = Math.random() * 720 - 360;
+
+            piece.animate([
+                { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+                { transform: `translate(${dx}px, ${dy + 600}px) rotate(${rot}deg)`, opacity: 0 }
+            ], { duration: 1200 + Math.random() * 800, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' });
+
+            container.appendChild(piece);
+            setTimeout(() => piece.remove(), 2500);
+        }
+    }
+
+    // ── Floating food emojis ──
+    const foods = ['🍜', '🍱', '🥟', '🍛', '🍚', '🥡', '🧋', '🍲', '🥤', '🍙'];
+    function spawnFloater() {
+        const el = document.createElement('div');
+        el.className = 'floater';
+        el.textContent = foods[Math.floor(Math.random() * foods.length)];
+        el.style.left = (5 + Math.random() * 90) + 'vw';
+        el.style.setProperty('--dur', (5 + Math.random() * 4) + 's');
+        el.style.setProperty('--delay', '0s');
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 10000);
+    }
+
+    // Spawn a few on load, then periodically
+    for (let i = 0; i < 4; i++) {
+        setTimeout(spawnFloater, i * 800);
+    }
+    setInterval(spawnFloater, 3000);
+
+    // ── LINE button placeholder ──
+    // Replace '#' with your actual LINE add-friend URL
+    // e.g. https://line.me/R/ti/p/@YOUR_LINE_ID
+    document.getElementById('lineBtn').href = 'https://line.me/R/ti/p/@futurefoods';
+
+    // ── Init ──
+    window.addEventListener('load', initCanvas);
+    window.addEventListener('resize', () => {
+        if (!revealed) {
+            ctx.globalCompositeOperation = 'source-over';
+            initCanvas();
+        }
+    });
+})();
+</script>
+
+</body>
+</html>
